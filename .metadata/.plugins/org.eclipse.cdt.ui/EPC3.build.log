@@ -1,0 +1,6 @@
+20:50:44 **** Incremental Build of configuration Debug for project EPC3 ****
+make -r all 
+make: Nothing to be done for `all'.
+
+20:50:45 Build Finished (took 657ms)
+

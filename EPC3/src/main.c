@@ -18,8 +18,9 @@
 #include "lpc17xx_timer.h"
 
 
-#include "light.h"
+//#include "light.h"
 #include "oled.h"
+#include "Sensor.h"
 
 
 static uint32_t msTicks = 0;
@@ -124,69 +125,21 @@ static void init_ssp(void)
 
 }
 
-static void init_i2c(void)
-{
-	PINSEL_CFG_Type PinCfg;
 
-	/* Initialize I2C2 pin connect */
-	PinCfg.Funcnum = 2;
-	PinCfg.Pinnum = 10;
-	PinCfg.Portnum = 0;
-	PINSEL_ConfigPin(&PinCfg);
-	PinCfg.Pinnum = 11;
-	PINSEL_ConfigPin(&PinCfg);
-
-	// Initialize I2C peripheral
-	I2C_Init(LPC_I2C2, 100000);
-
-	/* Enable I2C1 operation */
-	I2C_Cmd(LPC_I2C2, ENABLE);
-}
 
 void Read_packet(void)
 {
     /* delay */
-	Timer0_Wait(200);
+	Timer0_Wait(400);
+	oled_putString((1+9*6),1, (uint8_t*)"      ", OLED_COLOR_BLACK, OLED_COLOR_WHITE);
 }
-
-static void init_adc(void)
-{
-	PINSEL_CFG_Type PinCfg;
-
-	/*
-	 * Init ADC pin connect
-	 * AD0.0 on P0.23
-	 */
-	PinCfg.Funcnum = 1;
-	PinCfg.OpenDrain = 0;
-	PinCfg.Pinmode = 0;
-	PinCfg.Pinnum = 23;
-	PinCfg.Portnum = 0;
-	PINSEL_ConfigPin(&PinCfg);
-
-	/* Configuration for ADC :
-	 * 	Frequency at 1Mhz
-	 *  ADC channel 0, no Interrupt
-	 */
-	ADC_Init(LPC_ADC, 1000000);
-	ADC_IntConfig(LPC_ADC,ADC_CHANNEL_0,DISABLE);
-	ADC_ChannelCmd(LPC_ADC,ADC_CHANNEL_0,ENABLE);
-	NVIC_EnableIRQ(TIMER0_IRQn);
-
-}
-
-uint32_t I2C_Interrupt_Done_Flag = 0;
-uint32_t lux = 0;
 
 int main (void)
 {
 
-    init_i2c();
-    init_ssp();
-    init_adc();
+	Sensor_new();
 
     oled_init();
-    light_init();
 
 	if (SysTick_Config(SystemCoreClock / 1000)) {
 		    while (1);  // Capture error
@@ -196,26 +149,16 @@ int main (void)
 
     oled_putString(1,1,  (uint8_t*)"Luz : ", OLED_COLOR_BLACK, OLED_COLOR_WHITE);
 
-    light_enable();
-    light_setRange(LIGHT_RANGE_4000);
-
     Read_packet();
 
     while(1) {
 
-    	if (I2C_Interrupt_Done_Flag == 1) {
+		intToString(Sensor_leitura(), buf, 10, 10);
+		oled_fillRect((1+9*6),9, 80, 16, OLED_COLOR_WHITE);
+		oled_putString((1+9*6),1, buf, OLED_COLOR_BLACK, OLED_COLOR_WHITE);
 
-			/* output values to OLED display */
-
-			intToString(lux, buf, 10, 10);
-			oled_fillRect((1+9*6),9, 80, 16, OLED_COLOR_WHITE);
-			oled_putString((1+9*6),1, buf, OLED_COLOR_BLACK, OLED_COLOR_WHITE);
-
-			I2C_Interrupt_Done_Flag = 0;
-
-			//interrupção de 200ms
-			Read_packet();
-    	}
+		//interrupção de 200ms
+		Read_packet();
     }
 
 }
@@ -227,16 +170,4 @@ void check_failed(uint8_t *file, uint32_t line)
 
 	/* Infinite loop */
 	while(1);
-}
-
-void TIMER0_IRQHandler(void)
-{
-	//desabilita a interrupção timer0
-	NVIC_DisableIRQ(TIMER0_IRQn);
-
-	//faz a leitura do sensor de luz
-	lux = light_read();
-
-	//altera valor da flag para saber que uma leitura foi feita
-	I2C_Interrupt_Done_Flag = 1;
 }

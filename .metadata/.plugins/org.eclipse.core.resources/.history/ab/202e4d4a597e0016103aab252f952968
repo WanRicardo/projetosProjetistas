@@ -1,0 +1,13 @@
+/*
+ * Sensor.c
+ *
+ *  Created on: 12 de set de 2016
+ *      Author: Wanderson
+ */
+
+#include "Sensor.h"
+
+typedef struct Sensor {
+
+
+};

@@ -29,7 +29,7 @@ all: EPC3.axf
 EPC3.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"C:\Users\Wanderson\Documents\LPCXpresso_8.2.0_647\workspace\Lib_CMSISv1p30_LPC17xx\Debug" -L"C:\Users\Wanderson\Documents\LPCXpresso_8.2.0_647\workspace\Lib_EaBaseBoard\Debug" -L"C:\Users\Wanderson\Documents\LPCXpresso_8.2.0_647\workspace\Lib_MCU\Debug" -Xlinker --gc-sections -Xlinker -Map=EPC3.map -mcpu=cortex-m3 -mthumb -T "EPC3_Debug.ld" -o "EPC3.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -L"C:\Users\Wanderson\Documents\GitHub\projetosProjetistas\Lib_CMSISv1p30_LPC17xx\Debug" -L"C:\Users\Wanderson\Documents\GitHub\projetosProjetistas\Lib_EaBaseBoard\Debug" -L"C:\Users\Wanderson\Documents\GitHub\projetosProjetistas\Lib_MCU\Debug" -Xlinker --gc-sections -Xlinker -Map=EPC3.map -mcpu=cortex-m3 -mthumb -T "EPC3_Debug.ld" -o "EPC3.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

@@ -1,0 +1,9 @@
+typedef struct ClasseSensor {
+
+};
+
+light_init();
+light_enable();
+light_setRange(LIGHT_RANGE_4000);
+
+leituraLuz = light_read();
