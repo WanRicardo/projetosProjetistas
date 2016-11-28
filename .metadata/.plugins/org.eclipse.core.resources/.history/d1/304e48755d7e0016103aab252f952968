@@ -1,4 +1,0 @@
-typedef struct ClasseSensor {
-
-};
-leituraLuz = light_read();

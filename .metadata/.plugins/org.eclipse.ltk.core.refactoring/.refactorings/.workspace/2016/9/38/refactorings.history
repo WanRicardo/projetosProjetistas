@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;EPC3/src/Sensor.h&apos;" deleteContents="false" description="Delete resource &apos;EPC3/src/Sensor.h&apos;" element1="/EPC3/src/Sensor.h" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1473682530183"/>&#x0A;<refactoring comment="Delete resource &apos;EPC3/src/Sensor.cpp&apos;" deleteContents="false" description="Delete resource &apos;EPC3/src/Sensor.cpp&apos;" element1="/EPC3/src/Sensor.cpp" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1473683938299"/>
-</session>
